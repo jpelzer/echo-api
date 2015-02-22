@@ -1,0 +1,6 @@
+{
+  "server":"http://<ip address of squeezebox server>",
+  "port":9002,
+  // MAC address of one of your players, used to control a group
+  "mainPlayerMAC":"00:00:00:00:00:00"
+}

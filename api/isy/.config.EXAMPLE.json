@@ -1,0 +1,12 @@
+{
+  "username": "admin",
+  "password": "admin",
+  "server" : "ip address of your ISY"
+  // This maps a light description ('turn off XXX lights') to a device or scene
+  "namesToIds": {
+    // This is a scene
+    "kitchen": 12345,
+    // This is a device
+    "porch": "6 6 BD 1",
+  }
+}

@@ -1,9 +1,23 @@
 var Echo = require('./api/echo');
-var NestApi = require('./api/nest');
-var HueApi = require('./api/hue');
 var myEcho = new Echo();
-myEcho.apis.push(new NestApi());
-myEcho.apis.push(new HueApi());
+var config = require('./.config.json')
+
+if(config.enableIsy) {
+  var IsyApi = require('./api/isy');
+  myEcho.apis.push(new IsyApi());
+}
+if(config.enableSqueeze) {
+  var SqueezeApi = require('./api/squeeze');
+  myEcho.apis.push(new SqueezeApi());
+}
+if(config.enableHue) {
+  var SqueezeApi = require('./api/hue');
+  myEcho.apis.push(new HueApi());
+}
+if(config.enableNest) {
+  var SqueezeApi = require('./api/nest');
+  myEcho.apis.push(new NestApi());
+}
 
 setInterval(function() {
   myEcho.fetchTasks();

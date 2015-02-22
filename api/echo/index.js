@@ -1,6 +1,13 @@
 var Echo = function() {
   var self = this;
-  self.credentials = require('./.credentials');
+  self.config = require('./.credentials');
+  self.cheerio = require('cheerio');
+  self.csrf = null;
+
+  var request = require('request');
+  self.jar = request.jar();
+  self.req = request.defaults({jar: self.jar});
+
   self.domain = 'https://pitangui.amazon.com';
   self.tasksToFetch = 100;
   self.apis = [];
@@ -14,7 +21,6 @@ Echo.prototype.request = function(api, method, params, data, callback) {
   url += '/api/' + api;
 
   var headers = {
-    'Cookie': self.credentials.cookie,
     'User-Agent': 'User Agent/0.0.1'
   };
 
@@ -30,13 +36,22 @@ Echo.prototype.request = function(api, method, params, data, callback) {
     options.headers['Content-Type'] = 'application/json';
     options.headers['Origin'] = 'http://echo.amazon.com';
     options.headers['Referer'] = 'http://echo.amazon.com/spa/index.html';
-    options.headers['csrf'] = self.credentials.csrf;
+    if(self.csrf == null) {
+      // Try to find csrf in the cookie jar
+      var cookies = self.jar.getCookies("http://amazon.com/");
+      for(var i = 0; i < cookies.length; i++) {
+        if(cookies[i].key == 'csrf')
+          self.csrf = cookies[i].value;
+      }
+    }
+    if(self.csrf != null) {
+      options.headers['csrf'] = self.csrf;
+    }
   }
 
-  var req = require('request');
-  req(options, function(err, res, body) {
+  self.req(options, function(err, res, body) {
     if(!err && res.statusCode == 200) {
-      callback.call(self, body);
+      callback.call(self, body, res);
     } else {
       console.log('err!');
       console.log(err, res.statusCode, body);
@@ -54,13 +69,76 @@ Echo.prototype.put = function(api, params, data, callback) {
   self.request(api, 'PUT', params, data, callback);
 };
 
+/** Takes the body from the HTML response to an API call and parses out the openid bs */
+Echo.prototype.doLogin = function(apiBody) {
+  var self = this;
+  self.csrf = null;
+
+  var $ = self.cheerio.load(apiBody);
+
+  var signInForm = $('#ap_signin_form');
+
+  var qs = {};
+
+  signInForm.find('input').each(function(index, input) {
+    var name = input.attribs.name;
+    var value = input.attribs.value;
+    if(name != null && name.indexOf('openid') > -1) {
+      value = new Buffer(value.replace('ape:', ''), 'base64');
+      qs[name] = value;
+    }
+  });
+
+  self.req.get({
+    url: "https://www.amazon.com/ap/signin",
+    qs: qs,
+    jar: self.jar
+  }, function(err, loginRequest, body) {
+    console.log("Handling login...");
+    $ = self.cheerio.load(body);
+
+    var signInForm = $('#ap_signin_form');
+
+    // Set up the form inputs, pulling in hidden elements and overlaying login info
+    var form = {};
+    signInForm.find('input').each(function(index, input) {
+      form[input.attribs.name] = input.attribs.value;
+    });
+    form['email'] = self.config.email;
+    form['password'] = self.config.password;
+    form['create'] = "0";
+
+    var submitURL = signInForm.attr('action');
+    var headers = {
+      Referer: submitURL
+    };
+    if(self.csrf != null)
+      headers['csrf'] = self.csrf;
+
+    self.req.post({
+      url: submitURL,
+      form: form,
+      headers: headers,
+      jar: self.jar
+    }, function(err, httpResponse, body) {
+      // And here we are, login complete. We expect to have a 302 response here, but we'll ignore it.
+      console.log("Login complete.");
+    });
+  });
+};
+
 Echo.prototype.fetchTasks = function() {
   var self = this;
   self.busy = true;
   self.get('todos', {
     type: 'TASK',
     size: self.tasksToFetch
-  }, function(body) {
+  }, function(body, response) {
+    if(body.indexOf('<html>') > -1) {
+      // The API is returning an HTML login page, we should handle login now.
+      self.doLogin(body);
+      return;
+    }
     var json = JSON.parse(body);
     var tasks = json.values;
 
