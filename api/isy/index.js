@@ -15,10 +15,23 @@ var IsyTask = function() {
   // register commands
   self.register('turn ([\\w ]+)(?:lights?)? (on|off)', self.handleLightCommand);
   self.register('turn (on|off)(?: the)? ([\\w ]+)(?:lights?)?', self.handleLightCommandReverse);
+  self.register('run ([\\w ]+)', self.runProgram);
 };
 
 IsyTask.prototype = Object.create(Task.prototype);
 IsyTask.prototype.constructor = IsyTask;
+
+IsyTask.prototype.runProgram = function(name) {
+  var self = this;
+  var programID = self.config.namesToIds[name];
+  if(!programID) {
+    console.log("Don't know how to run program '%s'", name);
+    return;
+  }
+  self.isy.runIf(programID, function() {
+    console.log("Ran program for %s", name)
+  })
+};
 
 IsyTask.prototype.handleLightCommandReverse = function(state, name) {
   this.handleLightCommand(name, state)
