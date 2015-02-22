@@ -18,6 +18,9 @@ if(config.enableNest) {
   var SqueezeApi = require('./api/nest');
   myEcho.apis.push(new NestApi());
 }
+// Query API is generally enabled
+var QueryApi = require('./api/query');
+myEcho.apis.push(new QueryApi(myEcho));
 
 setInterval(function() {
   myEcho.fetchTasks();

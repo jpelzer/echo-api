@@ -3,6 +3,7 @@ var Echo = function() {
   self.config = require('./.credentials');
   self.cheerio = require('cheerio');
   self.csrf = null;
+  self.mainAccountId = null;
 
   var request = require('request');
   self.jar = request.jar();
@@ -54,7 +55,8 @@ Echo.prototype.request = function(api, method, params, data, callback) {
       callback.call(self, body, res);
     } else {
       console.log('err!');
-      console.log(err, res.statusCode, body);
+      if(res)
+        console.log(err, res.statusCode, body);
     }
   });
 };
@@ -122,10 +124,37 @@ Echo.prototype.doLogin = function(apiBody) {
       jar: self.jar
     }, function(err, httpResponse, body) {
       // And here we are, login complete. We expect to have a 302 response here, but we'll ignore it.
-      console.log("Login complete.");
+      console.log("Login complete. Getting main user id");
+      self.request('household', 'GET', {}, {}, function(body) {
+        var response = JSON.parse(body);
+        self.mainAccountId = response.accounts[0].id;
+        console.log("Main account id: %s", self.mainAccountId);
+      });
     });
   });
 };
+
+Echo.prototype.createTask = function(text) {
+  var self = this;
+  console.log("Creating task '%s'", text);
+  var data = {
+    complete: false,
+    createdDate: new Date().getTime(),
+    deleted: false,
+    itemId: null,
+    lastLocalUpdatedDate: null,
+    lastUpdatedDate: null,
+    nbestItems: null,
+    text: text,
+    type: "TASK",
+    utteranceId: null,
+    version: null
+  };
+  self.request('todos', 'POST', {}, data, function(body, response) {
+    console.log("Created task '%s'", text);
+  })
+};
+
 
 Echo.prototype.fetchTasks = function() {
   var self = this;
