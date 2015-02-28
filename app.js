@@ -4,18 +4,18 @@ var config = require('./.config.json')
 
 if(config.enableIsy) {
   var IsyApi = require('./api/isy');
-  myEcho.apis.push(new IsyApi());
+  myEcho.apis.push(new IsyApi(myEcho));
 }
 if(config.enableSqueeze) {
   var SqueezeApi = require('./api/squeeze');
-  myEcho.apis.push(new SqueezeApi());
+  myEcho.apis.push(new SqueezeApi(myEcho));
 }
 if(config.enableHue) {
-  var SqueezeApi = require('./api/hue');
+  var HueApi = require('./api/hue');
   myEcho.apis.push(new HueApi());
 }
 if(config.enableNest) {
-  var SqueezeApi = require('./api/nest');
+  var NestApi = require('./api/nest');
   myEcho.apis.push(new NestApi());
 }
 // Query API is generally enabled

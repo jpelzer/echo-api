@@ -77,8 +77,12 @@ the app is really just two steps:
 1. Run `node app` to run the app.
 
 ### Using ISY-99i
-The ISY currently responds to either "turn on/off (keyword) light(s)" OR "turn (keyword) light(s) 
-on/off", but I recommend the former, as the Echo tends to ignore the trailing 'off' in the latter when creating todos.
+* "turn on/off (keyword) light(s)" OR "turn (keyword) light(s) on/off"
+  * This can be chained, ie "turn on living room and kitchen lights"
+  * I recommend "turn on/off ..." vs "turn .... on/off," as the Echo tends to ignore the trailing 'off' in the latter when creating todos.
+* "(run|runif|runthen|runelse) (program name)" : Runs the given program, or the then or else clause explicitly
+* "query (temp|temperature|thermostat(s))" : Queries the current thermostat status and responds with a new RESPONSE: line per
+thermostat with the current temperature, set temperature, and mode.
 
 ### Using Squeezebox (Logitech Media Server)
 * play : Issues a play/pause command
@@ -88,6 +92,19 @@ on/off", but I recommend the former, as the Echo tends to ignore the trailing 'o
 one that matches your query (exact lowercase match). So if you have 'Classical Radio' and 'Classical Christmas Radio', you 
 should say 'play classical radio' to get the one you want. For things like 'Florence + the Machine Radio' I just say 
 'play florence' because I haven't done any work to strip weird characters or join words.
+* "set (player) voluem to (mute,zero-ten)" : Sets the given player's volume to zero to ten, mapped to the 0-100 of the 
+squeeze in a non-linear way. Made sense when I did it, I might change that.
+
+### The Query module
+The Query module doesn't actually do any work... It just matches requests, and then creates new todo items for other modules
+to complete, for instance "open garage door" creates a new task "run open garage door" which runs a program on the ISY. In 
+other cases, it creates many additional tasks, for instance "set volume to (number)" creates several tasks, each one setting
+the volume for a specific player on the first floor, "set kitchen volume to (number)", "set bathroom volume to (number)", etc.
+
+This module also takes advantage of the way the system treats todos that start with "RESPONSE:" (they get deleted 90 seconds
+after creation), so it can respond to you with confirmations. I use this to set my house temperature remotely via the app,
+"set temp vacation" or "set temp home", and it responds that it's done so, or I can run "query temp" which gives me the 
+current settings for each thermostat in the house in a separate "RESPONSE:" todo that gets deleted after 90 seconds.
 
 ## Todo
 
@@ -96,11 +113,6 @@ on the unversioned git repo
 - look for a better way of converting "seventy three" to 73
 - automatic creation of usernames for Hue (should be trivial, but it
   would be good to add it)
-- "scenes" (tasks that can call subtasks; i.e., set the lights *and*
-  temperature)
-- bi-directional controls... Use the Amazon Echo app to add a todo like 'query thermostats' and we'd update the todo with
-the answer.
-
 
 [wolfram]: https://developer.wolframalpha.com/portal/apisignup.html
 [hue-api]: https://github.com/peter-murray/node-hue-api

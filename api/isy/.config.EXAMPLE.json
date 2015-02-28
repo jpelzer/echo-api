@@ -1,12 +1,19 @@
 {
+  // REMOVE ALL COMMENTS FROM THIS FILE!
   "username": "admin",
   "password": "admin",
-  "server" : "ip address of your ISY"
+  "server" : "ip address of your ISY",
   // This maps a light description ('turn off XXX lights') to a device or scene
   "namesToIds": {
     // This is a scene
     "kitchen": 12345,
     // This is a device
-    "porch": "6 6 BD 1",
-  }
+    "porch": "6 6 BD 1"
+  },
+  "thermostats": [
+    // First floor
+    "12 34 56 1",
+    // Second floor
+    "23 45 67 1"
+  ]
 }

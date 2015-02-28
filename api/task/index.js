@@ -27,6 +27,9 @@ Task.prototype.parse = function(task) {
   });
 
   if(matches.length != 1) {
+    // No match... Check to see if it should be expired
+    if(task.text.indexOf("RESPONSE:") == 0 && task.createdDate + (90 * 1000) < new Date().getTime())
+      task.executed = true;
     return task;
   }
 

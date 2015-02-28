@@ -4,6 +4,7 @@ var Echo = function() {
   self.cheerio = require('cheerio');
   self.csrf = null;
   self.mainAccountId = null;
+  self.lastRun = 0;
 
   var request = require('request');
   self.jar = request.jar();
@@ -174,8 +175,9 @@ Echo.prototype.fetchTasks = function() {
     var oldStr = JSON.stringify(self.tasks);
     var newStr = JSON.stringify(tasks);
 
-    if(oldStr != newStr) {
+    if(oldStr != newStr || self.lastRun + 60000 < new Date().getTime()) {
       self.tasks = tasks;
+      self.lastRun = new Date().getTime();
       self.parseTasks();
     }
   });
