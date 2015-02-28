@@ -185,7 +185,8 @@ Echo.prototype.fetchTasks = function() {
 
 Echo.prototype.parseTasks = function() {
   var self = this;
-  console.log('%d tasks found.', self.tasks.length);
+  if(self.tasks.length > 0)
+    console.log('%d tasks found.', self.tasks.length);
 
   // TODO: fix this super inefficient code.
   var tasks = self.tasks;
