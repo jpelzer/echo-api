@@ -55,18 +55,15 @@ either numeric (for scenes) or hexidecimal separated by spaces (for individual d
 the ISY API directly. 
 
 ### Squeezebox Configuration
-The Squeezebox (ie Logitech Media Server) support needs an http://<ip> and port for the LMS, as well as the MAC address
-of one of your actual players. I haven't tested, but I'm going to make an assumption that this code will NOT work with 
+The Squeezebox (ie Logitech Media Server) support needs an http://<ip> and port for the LMS, as well as the MAC addresses
+of your actual players. I haven't tested, but I'm going to make an assumption that this code will NOT work with
 mysqueezebox.com systems, you have to be running a local server. The player MAC address is how all the squeezeboxes 
 identify themselves, and it is a six byte hexidecimal string. You can find it if you go to the 'Settings' page on LMS, 
 go to the 'Player' tab, and then go to 'Basic Settings' for one of your players. It will be listed in the summary, as 
 "Player MAC Address: 00:00:00:00:00:00". 
 
 If you have a number of players synchronized, it doesn't matter which player you choose, if you tell it to play something,
-all the players will play it.
-
-I may make life easier at some point and do it by name, especially if I make it possible to set voluem for a particular 
-player.
+all the players will play it. It uses the player defined as mainPlayerMAC in the configuration to issue control commands.
 
 ## Running the App
 
