@@ -31,7 +31,8 @@ var SqueezeTask = function(echo) {
   // register commands
   self.register('^play$', self.play);
   self.register('(?:skip|next)(?: this)?(?: (track|song))?', self.skip);
-  self.register('((un)?pause|stop)', self.pause);
+  self.register('(un)?pause', self.pause);
+  self.register('stop', self.stop);
   self.register('play(?: pandora)? (.+)', self.playPandora);
   self.register('set (.+) volume (?:to )?(mute|zero|one|two|three|four|five|six|seven|eight|nine|ten)', self.setVolume);
 };
@@ -63,7 +64,7 @@ SqueezeTask.prototype.play = function() {
     if(reply.ok)
       self.squeeze.players[self.MAIN_PLAYER_ID].play(function(reply) {
         if(!reply.ok)
-          console.log('Error occurred!'.red);
+          console.log('Error occurred!');
       });
   });
 };
@@ -74,7 +75,20 @@ SqueezeTask.prototype.pause = function() {
     if(reply.ok)
       self.squeeze.players[self.MAIN_PLAYER_ID].pause(function(reply) {
         if(!reply.ok)
-          console.log('Error occurred!'.red);
+          console.log('Error occurred!');
+      });
+  });
+};
+
+SqueezeTask.prototype.stop = function() {
+  var self = this;
+  self.squeeze.getPlayers(function(reply) {
+    if(reply.ok)
+      self.squeeze.players[self.MAIN_PLAYER_ID].getMode(function(reply) {
+        if(reply.ok && reply.result._mode === 'play') {
+          self.pause();
+        } else
+          console.log('Squeezebox is not playing, or error occurred. Cannot stop.');
       });
   });
 };
@@ -85,7 +99,7 @@ SqueezeTask.prototype.skip = function() {
     if(reply.ok)
       self.squeeze.players[self.MAIN_PLAYER_ID].next(function(reply) {
         if(!reply.ok)
-          console.log('Error occurred!'.red);
+          console.log('Error occurred!');
       });
   });
 };

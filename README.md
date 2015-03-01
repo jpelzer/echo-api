@@ -83,8 +83,9 @@ thermostat with the current temperature, set temperature, and mode.
 
 ### Using Squeezebox (Logitech Media Server)
 * play : Issues a play/pause command
-* (next|skip) (this) (track|song) : Skips the current track ('remind me to skip this track' or 'remind me to next' both work)
-* ((un)pause|stop) : issues a pause toggle (I know this is not especially intuitive. There wasn't a 'stop' command available.)
+* (next|skip)( this)( track| song) : Skips the current track ('remind me to skip this track' or 'remind me to next' both work)
+* ((un)pause : issues a pause toggle (if playing, pause. If paused, play)
+* stop : if playing, pause. Otherwise ignored.
 * play (pandora) (station name) : My favorite feature so far. Gets the list of your Pandora stations and plays the first 
 one that matches your query (exact lowercase match). So if you have 'Classical Radio' and 'Classical Christmas Radio', you 
 should say 'play classical radio' to get the one you want. For things like 'Florence + the Machine Radio' I just say 
