@@ -14,10 +14,10 @@ var IsyTask = function(echo) {
   });
 
   // register commands
-  self.register('turn ([\\w ]+)(?:lights?)? (on|off)', self.handleLightCommand);
-  self.register('turn (on|off)(?: the)? ([\\w ]+)(?:lights?)?', self.handleLightCommandReverse);
-  self.register('(run|runif|runthen|runelse) ([\\w ]+)', self.runProgram);
-  self.register('query (temp(erature)?|thermostats?)', self.queryTemperature);
+  self.register('^turn ([\\w ]+)(?:lights?)? (on|off)', self.handleLightCommand);
+  self.register('^turn (on|off)(?: the)? ([\\w ]+)(?:lights?)?', self.handleLightCommandReverse);
+  self.register('^(run|runif|runthen|runelse) ([\\w ]+)', self.runProgram);
+  self.register('^query (temp(erature)?|thermostats?)', self.queryTemperature);
 };
 
 IsyTask.prototype = Object.create(Task.prototype);

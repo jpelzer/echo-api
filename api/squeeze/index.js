@@ -30,11 +30,11 @@ var SqueezeTask = function(echo) {
 
   // register commands
   self.register('^play$', self.play);
-  self.register('(?:skip|next)(?: this)?(?: (track|song))?', self.skip);
-  self.register('(un)?pause', self.pause);
-  self.register('stop', self.stop);
-  self.register('play(?: pandora)? (.+)', self.playPandora);
-  self.register('set (.+) volume (?:to )?(mute|zero|one|two|three|four|five|six|seven|eight|nine|ten)', self.setVolume);
+  self.register('^(?:skip|next)(?: this)?(?: (track|song))?', self.skip);
+  self.register('^(?:un)?pause', self.pause);
+  self.register('^stop', self.stop);
+  self.register('^play(?: pandora)? (.+)', self.playPandora);
+  self.register('^set (.+) volume (?:to )?(mute|zero|one|two|three|four|five|six|seven|eight|nine|ten)', self.setVolume);
 };
 
 SqueezeTask.prototype = Object.create(Task.prototype);

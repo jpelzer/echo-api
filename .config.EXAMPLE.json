@@ -2,5 +2,6 @@
   "enableHue": true,
   "enableIsy": true,
   "enableNest": true,
-  "enableSqueeze": true
+  "enableSqueeze": true,
+  "enableKodi": true
 }
