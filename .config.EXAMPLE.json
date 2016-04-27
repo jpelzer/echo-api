@@ -3,5 +3,7 @@
   "enableIsy": true,
   "enableNest": true,
   "enableSqueeze": true,
-  "enableKodi": true
+  "enableKodi": true,
+  "listenPort": 9123,
+  "secretKey": "changeMe_IamTheOnlyThingProtectingTheServer"
 }

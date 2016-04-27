@@ -34,6 +34,7 @@ var SqueezeTask = function(echo) {
   self.register('^(?:un)?pause', self.pause);
   self.register('^stop', self.stop);
   self.register('^play(?: pandora)? (.+)', self.playPandora);
+  self.register('^playurl (.+)', self.playUrl);
   self.register('^set (.+) volume (?:to )?(mute|zero|one|two|three|four|five|six|seven|eight|nine|ten)', self.setVolume);
 };
 
@@ -56,6 +57,19 @@ SqueezeTask.prototype.setVolume = function(location, level) {
       });
     }
   });
+};
+
+SqueezeTask.prototype.playUrl = function(url) {
+  var self = this;
+  console.log("Attempting to play URL=%s", url);
+  self.squeeze.getPlayers(function(reply) {
+    if(reply.ok) {
+      self.squeeze.players[self.MAIN_PLAYER_ID].request(self.MAIN_PLAYER_ID, ["playlist", "play", url], function(reply) {
+        if(!reply.ok)
+          console.log('Error occurred!');
+      })
+    }
+  })
 };
 
 SqueezeTask.prototype.play = function() {

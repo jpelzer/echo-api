@@ -25,6 +25,7 @@
     "squeezenode": "0.0.9",
     "cheerio": "0.18.0",
     "tough-cookie": "0.12.1",
-    "xbmc-listener": "0.1.4"
+    "xbmc-listener": "0.1.4",
+    "restify": "4.0.3"
   }
 }

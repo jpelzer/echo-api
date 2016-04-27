@@ -29,7 +29,6 @@ QueryTask.prototype.startMy = function(whatToStart) {
       this.echo.createTask("set volume to two");
       this.echo.createTask("set bedroom volume to mute");
       this.echo.createTask("turn on kitchen and dining room lights");
-      this.echo.createTask("turn off living room lights");
       this.echo.createTask("play classical radio");
       this.echo.createTask("RESPONSE: Started morning mode.");
       break;

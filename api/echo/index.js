@@ -156,6 +156,30 @@ Echo.prototype.createTask = function(text) {
   })
 };
 
+Echo.prototype.fetchAndParseShoppingList = function() {
+  var self = this;
+  self.get('todos', {
+    type: 'SHOPPING_ITEM',
+    size: self.tasksToFetch
+  }, function(body, response) {
+    if(body.indexOf('<html>') > -1) {
+      // The API is returning an HTML login page, let fetchTasks handle login.
+      return;
+    }
+    var json = JSON.parse(body);
+    var tasks = json.values;
+
+    if(tasks.length > 0)
+      console.log('%d shopping list entries found.', tasks.length);
+
+    for(var j in tasks) {
+      var task = tasks[j];
+      self.createTask("add " + task.text + " to shopping list");
+      task.executed = true;
+    }
+    self.cleanupTasks(tasks);
+  });
+};
 
 Echo.prototype.fetchTasks = function() {
   var self = this;
