@@ -6,10 +6,10 @@ var Task = require('../task');
 * requests and then creates new requests that the other modules in the system use to do real work.
 */
 
-var QueryTask = function(echo) {
+var QueryTask = function(commandQueue) {
   var self = this;
   Task.call(self, null);
-  self.echo = echo;
+  self.commandQueue = commandQueue;
 
   // register commands
   self.register('^query time$', self.queryTime);
@@ -26,47 +26,47 @@ QueryTask.prototype.constructor = QueryTask;
 QueryTask.prototype.startMy = function(whatToStart) {
   switch(whatToStart) {
     case 'morning':
-      this.echo.createTask("set volume to two");
-      this.echo.createTask("set bedroom volume to mute");
-      this.echo.createTask("turn on kitchen and dining room lights");
-      this.echo.createTask("play classical radio");
-      this.echo.createTask("RESPONSE: Started morning mode.");
+      this.commandQueue.createTask("set volume to two");
+      this.commandQueue.createTask("set bedroom volume to mute");
+      this.commandQueue.createTask("turn on kitchen and dining room lights");
+      this.commandQueue.createTask("play classical radio");
+      this.commandQueue.createTask("RESPONSE: Started morning mode.");
       break;
     case 'work':
-      this.echo.createTask("turn off kitchen and dining room and living room lights");
-      this.echo.createTask("RESPONSE: Started work mode. Have a good day!");
+      this.commandQueue.createTask("turn off kitchen and dining room and living room lights");
+      this.commandQueue.createTask("RESPONSE: Started work mode. Have a good day!");
       break;
     default:
-      this.echo.createTask("RESPONSE: Don't know how to start " + whatToStart + " mode.");
+      this.commandQueue.createTask("RESPONSE: Don't know how to start " + whatToStart + " mode.");
   }
 };
 
 QueryTask.prototype.setTemperature = function(mode) {
-  this.echo.createTask("runthen set temp " + mode);
-  this.echo.createTask("RESPONSE: Setting temperature to " + mode + " mode.");
+  this.commandQueue.createTask("runthen set temp " + mode);
+  this.commandQueue.createTask("RESPONSE: Setting temperature to " + mode + " mode.");
 };
 
 QueryTask.prototype.setVolume = function(level) {
-  this.echo.createTask("set living room volume to " + level);
-  this.echo.createTask("set kitchen volume to " + level);
-  this.echo.createTask("set bathroom volume to " + level);
+  this.commandQueue.createTask("set living room volume to " + level);
+  this.commandQueue.createTask("set kitchen volume to " + level);
+  this.commandQueue.createTask("set bathroom volume to " + level);
 };
 
 QueryTask.prototype.garageDoor = function(openClose) {
-  this.echo.createTask("run " + openClose + " garage door");
+  this.commandQueue.createTask("run " + openClose + " garage door");
   if(openClose == "open")
-    this.echo.createTask("RESPONSE: Opening garage door.");
+    this.commandQueue.createTask("RESPONSE: Opening garage door.");
   else
-    this.echo.createTask("RESPONSE: Closing garage door.");
+    this.commandQueue.createTask("RESPONSE: Closing garage door.");
 };
 
 QueryTask.prototype.unlockFrontDoor = function() {
-  this.echo.createTask("turn on front door unlock request");
-  this.echo.createTask("RESPONSE: Initiated door unlock sequence.");
+  this.commandQueue.createTask("turn on front door unlock request");
+  this.commandQueue.createTask("RESPONSE: Initiated door unlock sequence.");
 };
 
 QueryTask.prototype.queryTime = function() {
-  this.echo.createTask("RESPONSE: The time is now: " + new Date());
+  this.commandQueue.createTask("RESPONSE: The time is now: " + new Date());
 };
 
 

@@ -1,9 +1,9 @@
 var Task = require('../task');
-var IsyTask = function(echo) {
+var IsyTask = function(commandQueue) {
   var self = this;
   Task.call(self, null);
   self.config = require('./.config.json');
-  self.echo = echo;
+  self.commandQueue = commandQueue;
 
   var ISY = require("isy");
 
@@ -63,7 +63,7 @@ IsyTask.prototype.queryTemperature = function() {
         " cool:" + thermostat.coolTemp +
         " heat:" + thermostat.heatTemp +
         " mode:" + thermostat.mode;
-      self.echo.createTask("RESPONSE: " + summary);
+      self.commandQueue.createTask("RESPONSE: " + summary);
     });
   });
 };

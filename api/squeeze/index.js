@@ -1,8 +1,8 @@
 var Task = require('../task');
-var SqueezeTask = function(echo) {
+var SqueezeTask = function(commandQueue) {
   var self = this;
   Task.call(self, null);
-  self.echo = echo;
+  self.commandQueue = commandQueue;
 
   self.config = require("./.config.json");
   var SqueezeServer = require('squeezenode');
@@ -131,7 +131,7 @@ SqueezeTask.prototype.playPandora = function(station) {
             return stationRegex.test(candidate.name.toLowerCase());
           });
           if(candidates.length > 0) {
-            self.echo.createTask("RESPONSE: Playing station: " + candidates[0].name);
+            self.commandQueue.createTask("RESPONSE: Playing station: " + candidates[0].name);
             self.squeeze.request(playerId, ['pandora', 'playlist', 'play', 'item_id:' + candidates[0].id], function(result) {
               console.dir(result);
             });

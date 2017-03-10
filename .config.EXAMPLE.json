@@ -1,5 +1,6 @@
 {
   "enableHue": true,
+  "enableEcho": true,
   "enableIsy": true,
   "enableNest": true,
   "enableSqueeze": true,

@@ -17,15 +17,15 @@
   },
   "homepage": "https://github.com/ghballiet/amazon-echo-api",
   "dependencies": {
-    "node-hue-api": "^0.2.6",
+    "node-hue-api": "^2.3.0",
     "request": "^2.51.0",
     "unofficial-nest-api": "^0.1.4",
-    "wolfram-alpha": "^0.1.1",
+    "wolfram-alpha": "^0.5.0",
     "isy": "git+ssh://git@github.com:jpelzer/node-isy.git",
-    "squeezenode": "0.0.9",
-    "cheerio": "0.18.0",
-    "tough-cookie": "0.12.1",
+    "squeezenode": "0.1.0",
+    "cheerio": "0.22.0",
+    "tough-cookie": "2.3.2",
     "xbmc-listener": "0.1.4",
-    "restify": "4.0.3"
+    "restify": "4.3.0"
   }
 }

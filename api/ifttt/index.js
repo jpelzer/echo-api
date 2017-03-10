@@ -1,5 +1,5 @@
 var Task = require('../task');
-var IFTTT = function(echo) {
+var IFTTT = function(commandQueue) {
   var self = this;
   Task.call(self, null);
   self.config = require('./.credentials');
@@ -7,7 +7,7 @@ var IFTTT = function(echo) {
   var request = require('request');
   self.jar = request.jar();
   self.req = request.defaults({jar: self.jar});
-  self.echo = echo;
+  self.commandQueue = commandQueue;
   // register commands
   self.register('^add ([\\w ]+) to shopping list', self.addToShoppingList);
 
